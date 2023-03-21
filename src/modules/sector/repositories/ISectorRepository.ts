@@ -1,4 +1,4 @@
-import Sector from '@modules/user/infra/typeorm/entities/Sector';
+import Sector from '@modules/sector/infra/typeorm/entities/Sector';
 import { IPagingResponse } from '@shared/utils';
 import { IPagingTypeORM } from '@shared/infra/http/middlewares/getPagingHandler';
 import ICreateSectorDTO from '../dtos/ICreateSectorDTO';

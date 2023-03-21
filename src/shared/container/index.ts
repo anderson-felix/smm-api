@@ -15,8 +15,8 @@ import UserRepository from '@modules/user/infra/typeorm/repositories/UserReposit
 import IOrderRepository from '@modules/order/repositories/IOrderRepository';
 import OrderRepository from '@modules/order/infra/typeorm/repositories/OrderRepository';
 
-import ISectorRepository from '@modules/user/repositories/ISectorRepository';
-import SectorRepository from '@modules/user/infra/typeorm/repositories/SectorRepository';
+import ISectorRepository from '@modules/sector/repositories/ISectorRepository';
+import SectorRepository from '@modules/sector/infra/typeorm/repositories/SectorRepository';
 
 import ICustomerRepository from '@modules/customer/repositories/ICustomerRepository';
 import CustomerRepository from '@modules/customer/infra/typeorm/repositories/CustomerRepository';

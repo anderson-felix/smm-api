@@ -2,8 +2,8 @@ import { getRepository, Repository } from 'typeorm';
 
 import { formatPagingResponse } from '@shared/utils';
 import { IPagingTypeORM } from '@shared/infra/http/middlewares/getPagingHandler';
-import ISectorRepository from '@modules/user/repositories/ISectorRepository';
-import ICreateSectorDTO from '@modules/user/dtos/ICreateSectorDTO';
+import ISectorRepository from '@modules/sector/repositories/ISectorRepository';
+import ICreateSectorDTO from '@modules/sector/dtos/ICreateSectorDTO';
 import Sector from '../entities/Sector';
 
 export default class SectorRepository implements ISectorRepository {

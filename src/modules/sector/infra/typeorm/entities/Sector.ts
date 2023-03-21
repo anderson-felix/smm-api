@@ -1,5 +1,3 @@
-import CollaboratorSectorRelation from '@modules/collaborator/infra/typeorm/entities/CollaboratorSectorRelation';
-import OrderSectorRelation from '@modules/order/infra/typeorm/entities/OrderSectorRelation';
 import {
   Entity,
   Column,
@@ -11,7 +9,10 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import User from './User';
+
+import CollaboratorSectorRelation from '@modules/collaborator/infra/typeorm/entities/CollaboratorSectorRelation';
+import OrderSectorRelation from '@modules/order/infra/typeorm/entities/OrderSectorRelation';
+import User from '@modules/user/infra/typeorm/entities/User';
 
 @Entity('sector')
 export default class Sector {

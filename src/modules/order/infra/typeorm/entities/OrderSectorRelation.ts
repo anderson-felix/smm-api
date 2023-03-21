@@ -1,4 +1,4 @@
-import Sector from '@modules/user/infra/typeorm/entities/Sector';
+import Sector from '@modules/sector/infra/typeorm/entities/Sector';
 import {
   Entity,
   Column,

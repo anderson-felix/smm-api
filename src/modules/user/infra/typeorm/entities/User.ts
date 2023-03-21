@@ -15,7 +15,7 @@ import Collaborator from '@modules/collaborator/infra/typeorm/entities/Collabora
 import Customer from '@modules/customer/infra/typeorm/entities/Customer';
 import UserNotification from '@modules/notification/infra/typeorm/entities/UserNotification';
 import OrderComment from '@modules/order/infra/typeorm/entities/OrderComment';
-import Sector from './Sector';
+import Sector from '@modules/sector/infra/typeorm/entities/Sector';
 
 @Entity('user')
 export default class User {
