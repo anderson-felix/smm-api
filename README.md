@@ -1,5 +1,5 @@
 <h1 align='center'>
-    NOZ - API
+    SOCIAL MEDIA MANAGEMENT - API
 </h1>
 
 ## Instruções:
