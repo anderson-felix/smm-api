@@ -1,0 +1,30 @@
+version: '3.7'
+
+volumes:
+  db:
+
+networks:
+  app_net:
+
+services:
+  backend:
+    image: backend
+    container_name: backend
+    networks:
+      app_net:
+    ports:
+      - 3000:3000
+    volumes:
+      - '.:/home/app'
+
+  db:
+    image: postgres:14.1
+    container_name: db
+    networks:
+      app_net:
+    ports:
+      - 5432:5432
+    volumes:
+      - 'db:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_PASSWORD: postgres

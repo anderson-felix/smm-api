@@ -1,0 +1,8 @@
+{
+  "Template": {
+    "TemplateName": "RecoveryCodeTemplate",
+    "SubjectPart": "Recuperação de senha",
+    "HtmlPart": "<div style=\"font-family: Poppins, sans-serif; font-size: 20px; color: #000\"><p>Olá {{name}}.</p><p>Foi solicitado uma recuperação de senha neste email, caso você não tenha feito nenhuma solicitação desconsidere essa mensagem.</p><p><i>Código de recuperação de senha</i>: <strong>{{code}}</strong></p></div>",
+    "TextPart": "Olá {{name}}.\r\nFoi solicitado uma recuperação de senha neste email, caso você não tenha feito nenhuma solicitação desconsidere essa mensagem.\nCódigo de recuperação de senha: {{code}}"
+  }
+}

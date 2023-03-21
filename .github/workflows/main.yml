@@ -1,0 +1,120 @@
+name: Production deploy
+
+on:
+  push:
+    branches:
+      - none
+
+jobs:
+  Setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install docker and docker-compose
+        uses: darklabsbr/docker-action@v1.1
+        with:
+          ssh_user: ${{ secrets.SSH_USER }}
+          ssh_host: ${{ secrets.SSH_HOST }}
+          ssh_key: ${{ secrets.SSH_KEY }}
+
+  Deploy:
+    needs: Setup
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get repo data
+        uses: actions/checkout@v2
+
+      - name: Install dependencies and build the project
+        run: yarn
+
+      - name: Build project
+        run: yarn build
+
+      - name: Create nginx config files
+        env:
+          SERVER_NAME: ${{ secrets.SSL_CERTIFICATE_ADDRESS }}
+          PORT: ${{ secrets.PORT }}
+        shell: bash
+        run: |
+          cd production/nginx/conf.d
+
+          # maker sure envsubst don't replace these nginx variables:
+          export uri='$uri'
+          export host='$host'
+
+          envsubst < http.conf.template > http.conf
+          envsubst < https.conf.template > https.conf.disabled
+          rm http.conf.template https.conf.template
+
+      - name: Create .env file
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+
+          PORT: ${{ secrets.PORT }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          APP_API_URL: ${{ secrets.APP_API_URL }}
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+          LOCAL_UPLOAD_SECRET: ${{ secrets.LOCAL_UPLOAD_SECRET }}
+
+        shell: bash
+        run: |
+          envsubst < production/.env.template > .env
+          envsubst < production/docker-compose.template.yml > docker-compose.yml
+          envsubst < production/ormconfig.template.json > ormconfig.json
+
+      - name: Copy files and folders
+        uses: darklabsbr/copy-action@v1.1
+        with:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_user: ${{ secrets.SSH_USER }}
+          ssh_host: ${{ secrets.SSH_HOST }}
+          source: dist production package.json yarn.lock .env docker-compose.yml ormconfig.json
+          destination: '~/backend'
+
+      - name: Install dependencies
+        uses: darklabsbr/ssh-action@v1.1
+        with:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_user: ${{ secrets.SSH_USER }}
+          ssh_host: ${{ secrets.SSH_HOST }}
+          command: |
+            cd ~/backend
+
+            mkdir -p tmp
+
+            # install dependencies
+            docker run --rm --volume "$PWD:/home/app" -w "/home/app" node:lts yarn --production
+
+            # build app image if necessary
+            if [[ "$(docker images -q backend:latest 2> /dev/null )" == "" ]]; then
+              docker build --tag backend -f production/Dockerfile .
+            fi
+
+            # rebuild the containers
+            docker-compose down
+            docker-compose up -d
+
+            # run migrations
+            docker exec backend node node_modules/.bin/typeorm migration:run
+
+      - name: Install SSL certificate
+        uses: darklabsbr/ssl-action@v1.1
+        with:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_user: ${{ secrets.SSH_USER }}
+          ssh_host: ${{ secrets.SSH_HOST }}
+          certificate_address: ${{ secrets.SSL_CERTIFICATE_ADDRESS }}
+          email: ${{ secrets.SSL_CERTIFICATE_EMAIL }}
+          certbot_folder: ~/backend/production/certbot
+          install_condition: '! -f ~/backend/production/nginx/conf.d/https.conf'
+          run_on_success: |
+            mv ~/backend/production/nginx/conf.d/https.conf.disabled \
+               ~/backend/production/nginx/conf.d/https.conf \
+            && docker restart nginx \
+            && echo "Successfully installed!"
