@@ -11,7 +11,8 @@ export type LocaleErrorType =
   | 'invalidFileType'
   | 'oldPasswordIsRequired'
   | 'passwordsNotMatch'
-  | 'populateTokenInvalid';
+  | 'populateTokenInvalid'
+  | 'orderNotFound';
 
 export const localeErrorLanguage = <const>['pt', 'en'];
 
@@ -116,6 +117,13 @@ export const localeErrors: Record<LocaleErrorType, LocaleErrorObject> = {
     message: {
       pt: 'Populate token inválido',
       en: 'Populate token invalid',
+    },
+  },
+  orderNotFound: {
+    status: 403,
+    message: {
+      pt: 'Pedido não encontrado',
+      en: 'Order not found',
     },
   },
 };

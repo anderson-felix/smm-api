@@ -22,6 +22,7 @@ userRouter.post(
 
 userRouter.post(
   '/create',
+  auth.owner,
   celebrate({
     [Segments.BODY]: {
       name: joiNameValidator.required(),
@@ -35,7 +36,7 @@ userRouter.post(
   UserController.create,
 );
 
-userRouter.get('/list', auth, getPagingHandler(), UserController.list);
+userRouter.get('/list', auth.admin, getPagingHandler(), UserController.list);
 
 userRouter.get('/profile', auth, UserController.profile);
 

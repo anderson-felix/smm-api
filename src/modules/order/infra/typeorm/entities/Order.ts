@@ -8,6 +8,7 @@ import {
   JoinColumn,
   DeleteDateColumn,
   OneToMany,
+  AfterLoad,
 } from 'typeorm';
 
 import User from '@modules/user/infra/typeorm/entities/User';
@@ -16,6 +17,7 @@ import { File, Flag } from '@shared/interfaces';
 import Customer from '@modules/customer/infra/typeorm/entities/Customer';
 import CollaboratorNotification from '@modules/notification/infra/typeorm/entities/CollaboratorNotification';
 import UserNotification from '@modules/notification/infra/typeorm/entities/UserNotification';
+import { buildFileLocation } from '@shared/utils';
 import OrderSectorRelation from './OrderSectorRelation';
 import OrderCollaboratorRelation from './OrderCollaboratorRelation';
 import OrderComment from './OrderComment';
@@ -34,8 +36,8 @@ export default class Order {
   @Column()
   display_name: string;
 
-  @Column()
-  description: string;
+  @Column({ type: 'text' })
+  description: string | null;
 
   @Column({ type: 'enum', enum: OrderStatusEnum })
   status: OrderStatusEnum;
@@ -77,4 +79,12 @@ export default class Order {
 
   @OneToMany(() => OrderComment, comment => comment.order)
   comments: OrderComment[];
+
+  @AfterLoad()
+  buildLocation() {
+    this.files = this.files.map(({ link, title }) => ({
+      title,
+      link: buildFileLocation(link),
+    }));
+  }
 }
