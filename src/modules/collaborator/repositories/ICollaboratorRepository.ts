@@ -8,6 +8,7 @@ export default interface ICollaboratorRepository {
   save(entity: Collaborator): Promise<Collaborator>;
   find(paging: IPagingTypeORM): Promise<IPagingResponse<Collaborator>>;
   findByEmail(email: string): Promise<Collaborator | undefined>;
+  findByFederalDocument(document: string): Promise<Collaborator | undefined>;
   findById(id: string): Promise<Collaborator | undefined>;
   findByIdToAuth(id: string): Promise<Collaborator | undefined>;
   findByIdWithPasswordSelected(

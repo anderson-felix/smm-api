@@ -13,7 +13,7 @@ export const flagJoiSchema = Joi.object().keys({
 export const addressJoiSchema = Joi.object().keys({
   address: Joi.string().required(),
   number: Joi.string().required(),
-  complement: Joi.string(),
+  complement: Joi.string().allow(null),
   neighborhood: Joi.string().required(),
   city: Joi.string().required(),
   state: Joi.string().required(),

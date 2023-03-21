@@ -8,6 +8,7 @@ export default interface ICustomerRepository {
   save(entity: Customer): Promise<Customer>;
   find(paging: IPagingTypeORM): Promise<IPagingResponse<Customer>>;
   findByEmail(email: string): Promise<Customer | undefined>;
+  findByFederalDocument(document: string): Promise<Customer | undefined>;
   findById(id: string): Promise<Customer | undefined>;
   remove(user: Customer): Promise<void>;
 }

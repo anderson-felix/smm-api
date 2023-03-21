@@ -30,11 +30,11 @@ export default class CustomerRepository implements ICustomerRepository {
   }
 
   public async findByEmail(email: string) {
-    return await this.ormRepository
-      .createQueryBuilder('customer')
-      .addSelect('customer.password')
-      .where('customer.email = :param', { param: email })
-      .getOne();
+    return await this.ormRepository.findOne({ where: { email } });
+  }
+
+  public async findByFederalDocument(federal_document: string) {
+    return await this.ormRepository.findOne({ where: { federal_document } });
   }
 
   public async findById(id: string) {

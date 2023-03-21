@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
 import { getPagingHandler } from '@shared/infra/http/middlewares/getPagingHandler';
-import CustomerController from '../controllers/CustomerController';
+import SectorController from '../controllers/SectorController';
 import auth from '../middlewares/auth';
 
 const sectorRouter = Router();
@@ -17,10 +17,10 @@ sectorRouter.post(
       color: Joi.string().allow(null).default(null),
     },
   }),
-  CustomerController.create,
+  SectorController.create,
 );
 
-sectorRouter.get('/list', auth, getPagingHandler(), CustomerController.list);
+sectorRouter.get('/list', auth, getPagingHandler(), SectorController.list);
 
 sectorRouter.get(
   '/show/:id',
@@ -30,7 +30,7 @@ sectorRouter.get(
       id: Joi.string().uuid().required(),
     },
   }),
-  CustomerController.show,
+  SectorController.show,
 );
 
 sectorRouter.patch(
@@ -48,7 +48,7 @@ sectorRouter.patch(
       color: Joi.string().allow(null),
     },
   }),
-  CustomerController.update,
+  SectorController.update,
 );
 
 sectorRouter.delete(
@@ -59,7 +59,7 @@ sectorRouter.delete(
       id: Joi.string().uuid().required(),
     },
   }),
-  CustomerController.delete,
+  SectorController.delete,
 );
 
 export default sectorRouter;

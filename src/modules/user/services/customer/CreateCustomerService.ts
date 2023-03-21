@@ -19,10 +19,14 @@ export default class CreateCustomerService {
   ) {}
 
   public async execute({ user, ...data }: IRequest): Promise<Customer> {
-    const customerWithSameMail = await this.customerRepository.findByEmail(
-      data.email,
-    );
+    const [customerWithSameMail, customerWithSameDocument] = await Promise.all([
+      this.customerRepository.findByEmail(data.email),
+      this.customerRepository.findByFederalDocument(data.federal_document),
+    ]);
+
     if (customerWithSameMail) throw new LocaleError('emailAlreadyExists');
+    if (customerWithSameDocument)
+      throw new LocaleError('documentAlreadyExists');
 
     const customer = await this.customerRepository.create({
       ...data,

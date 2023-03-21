@@ -7,6 +7,7 @@ export type LocaleErrorType =
   | 'operationNotPermitted'
   | 'userNotFound'
   | 'emailAlreadyExists'
+  | 'documentAlreadyExists'
   | 'contentTypeRequired'
   | 'invalidFileType'
   | 'oldPasswordIsRequired'
@@ -85,6 +86,13 @@ export const localeErrors: Record<LocaleErrorType, LocaleErrorObject> = {
     message: {
       pt: 'Esse e-mail já está cadastrado',
       en: 'This email already register',
+    },
+  },
+  documentAlreadyExists: {
+    status: 403,
+    message: {
+      pt: 'Esse documento já está cadastrado',
+      en: 'This document already register',
     },
   },
   contentTypeRequired: {

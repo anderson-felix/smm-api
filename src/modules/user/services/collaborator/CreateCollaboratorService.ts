@@ -27,9 +27,17 @@ export default class CreateCollaboratorService {
     password,
     ...data
   }: IRequest): Promise<Collaborator> {
-    const collaboratorWithSameMail =
-      await this.collaboratorRepository.findByEmail(data.email);
+    const [collaboratorWithSameMail, collaboratorWithSameDocument] =
+      await Promise.all([
+        this.collaboratorRepository.findByEmail(data.email),
+        this.collaboratorRepository.findByFederalDocument(
+          data.federal_document,
+        ),
+      ]);
+
     if (collaboratorWithSameMail) throw new LocaleError('emailAlreadyExists');
+    if (collaboratorWithSameDocument)
+      throw new LocaleError('documentAlreadyExists');
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 

@@ -15,6 +15,7 @@ customerRouter.post(
     [Segments.BODY]: {
       name: joiNameValidator.required(),
       email: Joi.string().email().required(),
+      description: Joi.string().allow(null).default(null),
       federal_document: Joi.string().required(),
       phone: Joi.string().required(),
       address: addressJoiSchema.allow(null).default(null),
@@ -48,6 +49,7 @@ customerRouter.patch(
     [Segments.BODY]: {
       name: joiNameValidator,
       email: Joi.string().email(),
+      description: Joi.string().allow(null),
       phone: Joi.string(),
       address: addressJoiSchema.allow(null),
     },

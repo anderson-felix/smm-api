@@ -37,6 +37,10 @@ export default class CollaboratorRepository implements ICollaboratorRepository {
       .getOne();
   }
 
+  public async findByFederalDocument(federal_document: string) {
+    return await this.ormRepository.findOne({ where: { federal_document } });
+  }
+
   public async findByIdToAuth(id: string) {
     return await this.ormRepository.findOne({ where: { id } });
   }

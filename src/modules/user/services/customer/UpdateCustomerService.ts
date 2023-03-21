@@ -11,6 +11,7 @@ interface IRequest {
   user: User;
   id: string;
   name?: string;
+  description?: string | null;
   email?: string;
   phone?: string;
   address?: Address | null;
