@@ -10,7 +10,8 @@ export type LocaleErrorType =
   | 'contentTypeRequired'
   | 'invalidFileType'
   | 'oldPasswordIsRequired'
-  | 'passwordsNotMatch';
+  | 'passwordsNotMatch'
+  | 'populateTokenInvalid';
 
 export const localeErrorLanguage = <const>['pt', 'en'];
 
@@ -108,6 +109,13 @@ export const localeErrors: Record<LocaleErrorType, LocaleErrorObject> = {
     message: {
       pt: 'As senhas não correspodem',
       en: 'Passwords not match',
+    },
+  },
+  populateTokenInvalid: {
+    status: 401,
+    message: {
+      pt: 'Populate token inválido',
+      en: 'Populate token invalid',
     },
   },
 };

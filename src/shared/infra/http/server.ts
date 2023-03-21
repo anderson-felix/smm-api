@@ -9,7 +9,7 @@ import { errors } from 'celebrate';
 
 import { logger } from '@shared/utils';
 import uploadConfig from '@config/upload';
-import routes from './routes';
+import router from './routes';
 import { getClientLanguage } from './middlewares/getClientLanguage';
 import { appErrorHandler } from './middlewares/appErrorHandler';
 
@@ -26,7 +26,7 @@ app.use(errors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(getClientLanguage);
-app.use(routes);
+app.use(router);
 
 app.use(appErrorHandler);
 
