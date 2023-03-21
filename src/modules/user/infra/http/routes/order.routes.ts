@@ -11,7 +11,7 @@ const orderRouter = Router();
 
 orderRouter.post(
   '/create',
-  auth.admin,
+  auth,
   celebrate({
     [Segments.BODY]: {
       customer_id: Joi.string().uuid().allow(null).default(null),
@@ -42,7 +42,7 @@ orderRouter.get(
 
 orderRouter.patch(
   '/update/:id',
-  auth.admin,
+  auth,
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
@@ -63,7 +63,7 @@ orderRouter.patch(
 
 orderRouter.delete(
   '/delete/:id',
-  auth.admin,
+  auth,
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),

@@ -47,7 +47,7 @@ export default class Collaborator {
   hourly_price: string | null;
 
   @Column({ type: 'json' })
-  address: Address;
+  address: Address | null;
 
   @Column({ type: 'json' })
   recent_flags: Flag[];

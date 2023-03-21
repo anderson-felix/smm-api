@@ -5,6 +5,7 @@ import User from '@modules/user/infra/typeorm/entities/User';
 import ICustomerRepository from '@modules/customer/repositories/ICustomerRepository';
 import ICreateCustomerDTO from '@modules/customer/dtos/ICreateCustomerDTO';
 import Customer from '@modules/customer/infra/typeorm/entities/Customer';
+import { LocaleError } from '@shared/errors/LocaleError';
 
 interface IRequest extends Omit<ICreateCustomerDTO, 'created_by'> {
   user: User;
@@ -18,6 +19,11 @@ export default class CreateCustomerService {
   ) {}
 
   public async execute({ user, ...data }: IRequest): Promise<Customer> {
+    const customerWithSameMail = await this.customerRepository.findByEmail(
+      data.email,
+    );
+    if (customerWithSameMail) throw new LocaleError('emailAlreadyExists');
+
     const customer = await this.customerRepository.create({
       ...data,
       created_by: user.id,

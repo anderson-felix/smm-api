@@ -48,7 +48,7 @@ userRouter.patch(
       name: joiNameValidator,
       email: Joi.string().email(),
       password: joiPasswordValidator,
-      old_password: Joi.string().trim(),
+      old_password: Joi.string(),
     },
   }),
   UserController.update,
