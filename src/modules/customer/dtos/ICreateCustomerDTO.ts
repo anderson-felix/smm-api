@@ -6,5 +6,5 @@ export default interface ICreateCustomerDTO {
   federal_document: string;
   email: string;
   phone: string;
-  address: Address;
+  address: Address | null;
 }

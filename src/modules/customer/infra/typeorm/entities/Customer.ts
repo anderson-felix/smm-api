@@ -38,7 +38,7 @@ export default class Customer {
   phone: string;
 
   @Column({ type: 'json' })
-  address: Address;
+  address: Address | null;
 
   @DeleteDateColumn()
   deleted_at: Date | null;

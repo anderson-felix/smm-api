@@ -44,9 +44,9 @@ export default class OrderController {
   }
 
   public static async delete(req: Request, res: Response): Promise<Response> {
-    const deleteUser = container.resolve(DeleteOrderService);
+    const deleteOrder = container.resolve(DeleteOrderService);
 
-    await deleteUser.execute({ user: req.user, id: req.params.id });
+    await deleteOrder.execute({ user: req.user, id: req.params.id });
 
     return res.sendStatus(204);
   }

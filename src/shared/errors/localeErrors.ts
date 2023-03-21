@@ -12,7 +12,10 @@ export type LocaleErrorType =
   | 'oldPasswordIsRequired'
   | 'passwordsNotMatch'
   | 'populateTokenInvalid'
-  | 'orderNotFound';
+  | 'orderNotFound'
+  | 'customerNotFound'
+  | 'collaboratorNotFound'
+  | 'sectorNotFound';
 
 export const localeErrorLanguage = <const>['pt', 'en'];
 
@@ -124,6 +127,27 @@ export const localeErrors: Record<LocaleErrorType, LocaleErrorObject> = {
     message: {
       pt: 'Pedido não encontrado',
       en: 'Order not found',
+    },
+  },
+  customerNotFound: {
+    status: 403,
+    message: {
+      pt: 'Cliente não encontrado',
+      en: 'Customer not found',
+    },
+  },
+  collaboratorNotFound: {
+    status: 403,
+    message: {
+      pt: 'Colaborador não encontrado',
+      en: 'Collaborator not found',
+    },
+  },
+  sectorNotFound: {
+    status: 403,
+    message: {
+      pt: 'Setor não encontrado',
+      en: 'Sector not found',
     },
   },
 };
