@@ -55,8 +55,12 @@ export default class UpdateOrderService {
       );
 
     if (!relation) throw new LocaleError('operationNotPermitted');
-    if (accept) relation.accepted_at = new Date();
-    if (!relation.accepted_at) throw new LocaleError('operationNotPermitted');
+    if (accept !== undefined) relation.accepted_at = accept ? new Date() : null;
+
+    if (!relation.accepted_at) {
+      await this.orderCollaboratorRelationRepository.save(relation);
+      return;
+    }
 
     await this.updateFiles(order, files);
     updateEntity(order, data);
