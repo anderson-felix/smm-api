@@ -3,7 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import { IPagingTypeORM } from '@shared/infra/http/middlewares/getPagingHandler';
 import { IPagingResponse } from '@shared/utils';
 import IOrderRepository from '@modules/order/repositories/IOrderRepository';
-import Order from '@modules/order/infra/typeorm/entities/Order';
+import { formatOrderEntity, IFormattedOrder } from '@modules/order/utils';
 
 @injectable()
 export default class ListOrdersService {
@@ -14,7 +14,8 @@ export default class ListOrdersService {
 
   public async execute(
     paging: IPagingTypeORM,
-  ): Promise<IPagingResponse<Order>> {
-    return await this.orderRepository.find(paging);
+  ): Promise<IPagingResponse<IFormattedOrder>> {
+    const response = await this.orderRepository.find(paging);
+    return { ...response, results: response.results.map(formatOrderEntity) };
   }
 }

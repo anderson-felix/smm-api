@@ -16,7 +16,8 @@ export type LocaleErrorType =
   | 'orderNotFound'
   | 'customerNotFound'
   | 'collaboratorNotFound'
-  | 'sectorNotFound';
+  | 'sectorNotFound'
+  | 'commentNotFound';
 
 export const localeErrorLanguage = <const>['pt', 'en'];
 
@@ -156,6 +157,13 @@ export const localeErrors: Record<LocaleErrorType, LocaleErrorObject> = {
     message: {
       pt: 'Setor não encontrado',
       en: 'Sector not found',
+    },
+  },
+  commentNotFound: {
+    status: 403,
+    message: {
+      pt: 'Comentário não encontrado',
+      en: 'comment not found',
     },
   },
 };

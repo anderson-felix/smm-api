@@ -2,43 +2,31 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
 import { getPagingHandler } from '@shared/infra/http/middlewares/getPagingHandler';
-import {
-  addressJoiSchema,
-  joiNameValidator,
-  joiPasswordValidator,
-} from '@shared/utils';
-import CollaboratorController from '../controllers/CollaboratorController';
+import { addressJoiSchema, joiNameValidator } from '@shared/utils';
+import CustomerController from '../controllers/CustomerController';
 import auth from '../middlewares/auth';
 
-const collaboratorRouter = Router();
+const customerRouter = Router();
 
-collaboratorRouter.post(
+customerRouter.post(
   '/create',
   auth.admin,
   celebrate({
     [Segments.BODY]: {
-      sector_ids: Joi.array().items(Joi.string().uuid().required()).required(),
       name: joiNameValidator.required(),
       email: Joi.string().email().required(),
-      password: joiPasswordValidator.required(),
       description: Joi.string().allow(null).default(null),
       federal_document: Joi.string().required(),
       phone: Joi.string().required(),
       address: addressJoiSchema.allow(null).default(null),
-      hourly_price: Joi.string().allow(null).default(null),
     },
   }),
-  CollaboratorController.create,
+  CustomerController.create,
 );
 
-collaboratorRouter.get(
-  '/list',
-  auth,
-  getPagingHandler(),
-  CollaboratorController.list,
-);
+customerRouter.get('/list', auth, getPagingHandler(), CustomerController.list);
 
-collaboratorRouter.get(
+customerRouter.get(
   '/show/:id',
   auth,
   celebrate({
@@ -46,10 +34,10 @@ collaboratorRouter.get(
       id: Joi.string().uuid().required(),
     },
   }),
-  CollaboratorController.show,
+  CustomerController.show,
 );
 
-collaboratorRouter.patch(
+customerRouter.patch(
   '/update/:id',
   auth.admin,
   celebrate({
@@ -59,21 +47,17 @@ collaboratorRouter.patch(
   }),
   celebrate({
     [Segments.BODY]: {
-      sector_ids: Joi.array().items(Joi.string().uuid().required()),
       name: joiNameValidator,
       email: Joi.string().email(),
-      password: joiPasswordValidator,
-      old_password: Joi.string(),
-      description: Joi.string(),
+      description: Joi.string().allow(null),
       phone: Joi.string(),
       address: addressJoiSchema.allow(null),
-      hourly_price: Joi.string(),
     },
   }),
-  CollaboratorController.update,
+  CustomerController.update,
 );
 
-collaboratorRouter.delete(
+customerRouter.delete(
   '/delete/:id',
   auth.admin,
   celebrate({
@@ -81,7 +65,7 @@ collaboratorRouter.delete(
       id: Joi.string().uuid().required(),
     },
   }),
-  CollaboratorController.delete,
+  CustomerController.delete,
 );
 
-export default collaboratorRouter;
+export default customerRouter;

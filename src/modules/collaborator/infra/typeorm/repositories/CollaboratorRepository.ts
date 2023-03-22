@@ -24,6 +24,8 @@ export default class CollaboratorRepository implements ICollaboratorRepository {
   }
 
   public async find(paging: IPagingTypeORM) {
+    paging.relations = ['sector_relations', 'sector_relations.sector'];
+
     const response = await this.ormRepository.findAndCount(paging);
 
     return formatPagingResponse(paging, response);
@@ -46,7 +48,14 @@ export default class CollaboratorRepository implements ICollaboratorRepository {
   }
 
   public async findById(id: string) {
-    return await this.ormRepository.findOne({ where: { id } });
+    return await this.ormRepository.findOne({
+      where: { id },
+      relations: ['sector_relations', 'sector_relations.sector'],
+    });
+  }
+
+  public async findByIds(ids: string[]) {
+    return await this.ormRepository.findByIds(ids);
   }
 
   public async findByIdWithPasswordSelected(id: string) {

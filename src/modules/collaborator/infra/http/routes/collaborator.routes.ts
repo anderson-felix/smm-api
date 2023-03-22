@@ -4,12 +4,12 @@ import { celebrate, Segments, Joi } from 'celebrate';
 import { getPagingHandler } from '@shared/infra/http/middlewares/getPagingHandler';
 import { userRoleArrayWithoutOwner } from '@modules/user/enums/RoleEnum';
 import { joiNameValidator, joiPasswordValidator } from '@shared/utils';
-import UserController from '../controllers/UserController';
+import CollaboratorController from '../controllers/CollaboratorController';
 import auth from '../middlewares/auth';
 
-const userRouter = Router();
+const collaboratorRouter = Router();
 
-userRouter.post(
+collaboratorRouter.post(
   '/session',
   celebrate({
     [Segments.BODY]: {
@@ -17,11 +17,12 @@ userRouter.post(
       password: Joi.string().required(),
     },
   }),
-  UserController.session,
+  CollaboratorController.session,
 );
 
-userRouter.post(
+collaboratorRouter.post(
   '/create',
+  auth.owner,
   celebrate({
     [Segments.BODY]: {
       name: joiNameValidator.required(),
@@ -32,14 +33,19 @@ userRouter.post(
         .required(),
     },
   }),
-  UserController.create,
+  CollaboratorController.create,
 );
 
-userRouter.get('/list', auth, getPagingHandler(), UserController.list);
+collaboratorRouter.get(
+  '/list',
+  auth.admin,
+  getPagingHandler(),
+  CollaboratorController.list,
+);
 
-userRouter.get('/profile', auth, UserController.profile);
+collaboratorRouter.get('/profile', auth, CollaboratorController.profile);
 
-userRouter.patch(
+collaboratorRouter.patch(
   '/update',
   auth,
   celebrate({
@@ -47,12 +53,12 @@ userRouter.patch(
       name: joiNameValidator,
       email: Joi.string().email(),
       password: joiPasswordValidator,
-      old_password: Joi.string().trim(),
+      old_password: Joi.string(),
     },
   }),
-  UserController.update,
+  CollaboratorController.update,
 );
 
-userRouter.delete('/delete', auth, UserController.delete);
+collaboratorRouter.delete('/delete', auth, CollaboratorController.delete);
 
-export default userRouter;
+export default collaboratorRouter;

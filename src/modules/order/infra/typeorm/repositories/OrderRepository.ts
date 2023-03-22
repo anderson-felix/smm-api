@@ -24,13 +24,32 @@ export default class OrderRepository implements IOrderRepository {
   }
 
   public async find(paging: IPagingTypeORM) {
+    paging.relations = [
+      'sector_relations',
+      'sector_relations.sector',
+      'collaborator_relations',
+      'collaborator_relations.collaborator',
+    ];
     const response = await this.ormRepository.findAndCount(paging);
 
     return formatPagingResponse(paging, response);
   }
 
-  public async findById(id: string) {
-    return await this.ormRepository.findOne({ where: { id } });
+  public async findById(id: string, relationless = false) {
+    return await this.ormRepository.findOne({
+      where: { id },
+      relations: relationless
+        ? []
+        : [
+            'sector_relations',
+            'sector_relations.sector',
+            'collaborator_relations',
+            'collaborator_relations.collaborator',
+            'comments',
+            'comments.collaborator',
+            'comments.user',
+          ],
+    });
   }
 
   public async remove(entity: Order) {

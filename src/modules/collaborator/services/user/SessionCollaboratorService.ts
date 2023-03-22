@@ -3,9 +3,9 @@ import { injectable, inject } from 'tsyringe';
 
 import authConfig from '@config/auth';
 import IHashProvider from '@shared/container/providers/HashProvider/models/IHashProvider';
-import IUserRepository from '@modules/user/repositories/IUserRepository';
 import { LocaleError } from '@shared/errors/LocaleError';
 import { logger } from '@shared/utils';
+import ICollaboratorRepository from '@modules/collaborator/repositories/ICollaboratorRepository';
 
 interface IRequest {
   email: string;
@@ -15,20 +15,20 @@ interface IRequest {
 @injectable()
 export default class SessionUserService {
   constructor(
-    @inject('UserRepository')
-    private userRepository: IUserRepository,
+    @inject('CollaboratorRepository')
+    private collaboratorRepository: ICollaboratorRepository,
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
   ) {}
 
   public async execute({ email, password }: IRequest) {
-    const user = await this.userRepository.findByEmail(email);
-    if (!user) throw new LocaleError('invalidLogin');
+    const collaborator = await this.collaboratorRepository.findByEmail(email);
+    if (!collaborator) throw new LocaleError('invalidLogin');
 
     const passwordMatched = await this.hashProvider.compareHash(
       password,
-      user.password,
+      collaborator.password,
     );
 
     if (!passwordMatched) throw new LocaleError('invalidLogin');
@@ -36,12 +36,12 @@ export default class SessionUserService {
     const { secret, expiresIn } = authConfig.jwt;
 
     const token = sign({}, secret, {
-      subject: user.id,
+      subject: collaborator.id,
       expiresIn,
     });
 
-    logger.info(`USER LOGGED IN - ${user.email}`);
+    logger.info(`COLLABORATOR LOGGED IN - ${collaborator.email}`);
 
-    return { user, token };
+    return { collaborator, token };
   }
 }

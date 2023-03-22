@@ -24,6 +24,9 @@ export default class OrderComment {
   @Column({ type: 'uuid' })
   user_id: string | null;
 
+  @Column()
+  text: string;
+
   @CreateDateColumn()
   created_at: Date;
 

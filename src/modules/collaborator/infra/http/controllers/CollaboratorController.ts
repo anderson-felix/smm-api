@@ -8,7 +8,7 @@ import DeleteUserService from '@modules/user/services/user/DeleteUserService';
 import ShowProfileService from '@modules/user/services/user/ShowProfileService';
 import UpdateUserService from '@modules/user/services/user/UpdateUserService';
 
-export default class UserController {
+export default class CollaboratorController {
   public static async session(req: Request, res: Response): Promise<Response> {
     const authenticateAdmin = container.resolve(SessionUserService);
 

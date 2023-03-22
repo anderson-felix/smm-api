@@ -10,6 +10,7 @@ export default interface ICollaboratorRepository {
   findByEmail(email: string): Promise<Collaborator | undefined>;
   findByFederalDocument(document: string): Promise<Collaborator | undefined>;
   findById(id: string): Promise<Collaborator | undefined>;
+  findByIds(ids: string[]): Promise<Collaborator[]>;
   findByIdToAuth(id: string): Promise<Collaborator | undefined>;
   findByIdWithPasswordSelected(
     email: string,

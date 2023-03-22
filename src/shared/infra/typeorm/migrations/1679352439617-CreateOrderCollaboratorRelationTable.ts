@@ -25,6 +25,12 @@ export class CreateOrderCollaboratorRelationTable1679352439617
             isNullable: true,
           },
           {
+            name: 'accepted_at',
+            type: 'uuid',
+            isNullable: true,
+            default: null,
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

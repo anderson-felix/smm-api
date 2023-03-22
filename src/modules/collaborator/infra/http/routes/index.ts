@@ -1,9 +1,13 @@
 import { Router } from 'express';
 
-import userRouter from './user.routes';
+import collaboratorRouter from './collaborator.routes';
+import orderRouter from './order.routes';
+import commentRouter from './comment.routes';
 
 const routes = Router();
 
-routes.use(userRouter);
+routes.use(collaboratorRouter);
+routes.use('/order', orderRouter);
+routes.use('/comment', commentRouter);
 
 export default routes;

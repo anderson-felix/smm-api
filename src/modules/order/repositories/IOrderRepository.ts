@@ -7,6 +7,6 @@ export default interface IOrderRepository {
   create(data: ICreateOrderDTO): Promise<Order>;
   save(movie: Order): Promise<Order>;
   find(paging: IPagingTypeORM): Promise<IPagingResponse<Order>>;
-  findById(id: string): Promise<Order | undefined>;
+  findById(id: string, relationless?: boolean): Promise<Order | undefined>;
   remove(movie: Order): Promise<void>;
 }

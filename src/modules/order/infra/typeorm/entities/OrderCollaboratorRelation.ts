@@ -21,6 +21,9 @@ export default class OrderCollaboratorRelation {
   @Column()
   collaborator_id: string;
 
+  @Column({ type: 'timestamp' })
+  accepted_at: Date | null;
+
   @CreateDateColumn()
   created_at: Date;
 

@@ -5,6 +5,7 @@ import orderRouter from './order.routes';
 import customerRouter from './customer.routes';
 import collaboratorRouter from './collaborator.routes';
 import sectorRouter from './sector.routes';
+import commentRouter from './comment.routes';
 
 const routes = Router();
 
@@ -13,5 +14,6 @@ routes.use('/order', orderRouter);
 routes.use('/customer', customerRouter);
 routes.use('/collaborator', collaboratorRouter);
 routes.use('/sector', sectorRouter);
+routes.use('/comment', commentRouter);
 
 export default routes;

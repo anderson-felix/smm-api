@@ -1,7 +1,7 @@
-import User from '@modules/user/infra/typeorm/entities/User';
+import Collaborator from '@modules/collaborator/infra/typeorm/entities/Collaborator';
 
 export default class ShowProfileService {
-  public async execute(user: User): Promise<User> {
-    return user;
+  public async execute(collaborator: Collaborator): Promise<Collaborator> {
+    return collaborator;
   }
 }

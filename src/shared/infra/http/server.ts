@@ -22,11 +22,11 @@ app.use(express.raw({ type: 'image/*', limit: '50mb' }));
 app.use('/files', express.static(uploadConfig.directory));
 
 app.use(cors());
-app.use(errors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(getClientLanguage);
 app.use(router);
+app.use(errors());
 
 app.use(appErrorHandler);
 

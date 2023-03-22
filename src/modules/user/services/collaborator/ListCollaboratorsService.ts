@@ -3,7 +3,10 @@ import { injectable, inject } from 'tsyringe';
 import { IPagingTypeORM } from '@shared/infra/http/middlewares/getPagingHandler';
 import { IPagingResponse } from '@shared/utils';
 import ICollaboratorRepository from '@modules/collaborator/repositories/ICollaboratorRepository';
-import Collaborator from '@modules/collaborator/infra/typeorm/entities/Collaborator';
+import {
+  formatCollaboratorEntity,
+  IFormattedCollaborator,
+} from '@modules/collaborator/utils';
 
 @injectable()
 export default class ListCollaboratorsService {
@@ -14,7 +17,11 @@ export default class ListCollaboratorsService {
 
   public async execute(
     paging: IPagingTypeORM,
-  ): Promise<IPagingResponse<Collaborator>> {
-    return await this.collaboratorRepository.find(paging);
+  ): Promise<IPagingResponse<IFormattedCollaborator>> {
+    const response = await this.collaboratorRepository.find(paging);
+    return {
+      ...response,
+      results: response.results.map(formatCollaboratorEntity),
+    };
   }
 }

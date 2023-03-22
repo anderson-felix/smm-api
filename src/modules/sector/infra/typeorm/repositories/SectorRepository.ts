@@ -33,6 +33,10 @@ export default class SectorRepository implements ISectorRepository {
     return await this.ormRepository.findOne({ where: { id } });
   }
 
+  public async findByIds(ids: string[]) {
+    return await this.ormRepository.findByIds(ids);
+  }
+
   public async remove(entity: Sector) {
     entity.deleted_at = new Date();
     await this.ormRepository.save(entity);

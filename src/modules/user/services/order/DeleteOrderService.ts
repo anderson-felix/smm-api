@@ -1,6 +1,5 @@
 import { injectable, inject } from 'tsyringe';
 
-import IUserRepository from '@modules/user/repositories/IUserRepository';
 import User from '@modules/user/infra/typeorm/entities/User';
 import { getFileNameFromUrl, logger } from '@shared/utils';
 import { LocaleError } from '@shared/errors/LocaleError';
@@ -15,9 +14,6 @@ interface IRequest {
 @injectable()
 export default class DeleteOrderService {
   constructor(
-    @inject('UserRepository')
-    private userRepository: IUserRepository,
-
     @inject('OrderRepository')
     private orderRepository: IOrderRepository,
 

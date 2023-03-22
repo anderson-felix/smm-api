@@ -7,10 +7,13 @@ import User from '@modules/user/infra/typeorm/entities/User';
 import ICollaboratorRepository from '@modules/collaborator/repositories/ICollaboratorRepository';
 import Collaborator from '@modules/collaborator/infra/typeorm/entities/Collaborator';
 import IHashProvider from '@shared/container/providers/HashProvider/models/IHashProvider';
+import ISectorRepository from '@modules/sector/repositories/ISectorRepository';
+import ICollaboratorSectorRelationRepository from '@modules/collaborator/repositories/ICollaboratorSectorRelationRepository';
 
 interface IRequest {
   user: User;
   id: string;
+  sector_ids?: string[];
   name?: string;
   email?: string;
   password?: string;
@@ -27,6 +30,12 @@ export default class UpdateCollaboratorService {
     @inject('CollaboratorRepository')
     private collaboratorRepository: ICollaboratorRepository,
 
+    @inject('SectorRepository')
+    private sectorRepository: ISectorRepository,
+
+    @inject('CollaboratorSectorRelationRepository')
+    private collaboratorSectorRelationRepository: ICollaboratorSectorRelationRepository,
+
     @inject('HashProvider')
     private hashProvider: IHashProvider,
   ) {}
@@ -36,6 +45,7 @@ export default class UpdateCollaboratorService {
     id,
     old_password,
     password,
+    sector_ids,
     ...params
   }: IRequest): Promise<Collaborator> {
     const collaborator = await this.collaboratorRepository.findById(id);
@@ -52,6 +62,7 @@ export default class UpdateCollaboratorService {
 
     updateEntity(collaborator, params);
 
+    await this.updateSectorRelations(collaborator, sector_ids);
     await this.collaboratorRepository.save(collaborator);
 
     logger.info(
@@ -80,5 +91,36 @@ export default class UpdateCollaboratorService {
     if (!isValid) throw new LocaleError('passwordsNotMatch');
 
     collaborator.password = await this.hashProvider.generateHash(new_password);
+  }
+
+  private async updateSectorRelations(
+    collaborator: Collaborator,
+    sector_ids?: string[],
+  ) {
+    if (!sector_ids?.length) return;
+
+    const relations = collaborator.sector_relations.filter(r =>
+      sector_ids.includes(r.sector_id),
+    );
+    if (sector_ids.length === relations.length) return;
+
+    const sectors = await this.sectorRepository.findByIds(sector_ids);
+    if (sectors.length !== sector_ids.length)
+      throw new LocaleError('sectorNotFound');
+
+    await Promise.all(
+      collaborator.sector_relations.map(r =>
+        this.collaboratorSectorRelationRepository.remove(r),
+      ),
+    );
+
+    collaborator.sector_relations = await Promise.all(
+      sectors.map(sector =>
+        this.collaboratorSectorRelationRepository.create({
+          collaborator_id: collaborator.id,
+          sector_id: sector.id,
+        }),
+      ),
+    );
   }
 }
