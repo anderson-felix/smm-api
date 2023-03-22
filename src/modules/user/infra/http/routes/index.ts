@@ -7,13 +7,13 @@ import collaboratorRouter from './collaborator.routes';
 import sectorRouter from './sector.routes';
 import commentRouter from './comment.routes';
 
-const routes = Router();
+const userRoutes = Router();
 
-routes.use(userRouter);
-routes.use('/order', orderRouter);
-routes.use('/customer', customerRouter);
-routes.use('/collaborator', collaboratorRouter);
-routes.use('/sector', sectorRouter);
-routes.use('/comment', commentRouter);
+userRoutes.use(userRouter);
+userRoutes.use('/order', orderRouter);
+userRoutes.use('/customer', customerRouter);
+userRoutes.use('/collaborator', collaboratorRouter);
+userRoutes.use('/sector', sectorRouter);
+userRoutes.use('/comment', commentRouter);
 
-export default routes;
+export default userRoutes;

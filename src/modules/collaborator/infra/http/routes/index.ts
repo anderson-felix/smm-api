@@ -4,10 +4,10 @@ import collaboratorRouter from './collaborator.routes';
 import orderRouter from './order.routes';
 import commentRouter from './comment.routes';
 
-const routes = Router();
+const collaboratorRoutes = Router();
 
-routes.use(collaboratorRouter);
-routes.use('/order', orderRouter);
-routes.use('/comment', commentRouter);
+collaboratorRoutes.use(collaboratorRouter);
+collaboratorRoutes.use('/order', orderRouter);
+collaboratorRoutes.use('/comment', commentRouter);
 
-export default routes;
+export default collaboratorRoutes;

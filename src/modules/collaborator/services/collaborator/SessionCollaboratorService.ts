@@ -13,7 +13,7 @@ interface IRequest {
 }
 
 @injectable()
-export default class SessionUserService {
+export default class SessionCollaboratorService {
   constructor(
     @inject('CollaboratorRepository')
     private collaboratorRepository: ICollaboratorRepository,

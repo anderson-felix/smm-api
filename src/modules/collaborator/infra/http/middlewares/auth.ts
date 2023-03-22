@@ -4,8 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import authConfig from '@config/auth';
 import { LocaleError } from '@shared/errors/LocaleError';
-import AuthenticateUserService from '@modules/user/services/user/AuthenticateUserService';
-import { UserRoleEnum } from '@modules/user/enums/RoleEnum';
+import AuthenticateCollaboratorService from '@modules/collaborator/services/collaborator/AuthenticateCollaboratorService';
 
 interface TokenPayload {
   int: number;
@@ -13,7 +12,7 @@ interface TokenPayload {
   sub: string;
 }
 
-const authenticateUser = async (req: Request) => {
+const authenticateCollaborator = async (req: Request) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -26,8 +25,8 @@ const authenticateUser = async (req: Request) => {
     const decoded = verify(token, authConfig.jwt.secret);
 
     const { sub: id } = decoded as TokenPayload;
-    const authService = container.resolve(AuthenticateUserService);
-    req.user = await authService.execute(id);
+    const authService = container.resolve(AuthenticateCollaboratorService);
+    req.collaborator = await authService.execute(id);
   } catch {
     throw new LocaleError('invalidToken');
   }
@@ -38,25 +37,7 @@ export default async function auth(
   _: Response,
   next: NextFunction,
 ) {
-  await authenticateUser(req);
+  await authenticateCollaborator(req);
 
   next();
 }
-
-auth.owner = async (req: Request, _: Response, next: NextFunction) => {
-  await authenticateUser(req);
-
-  if (req.user.role !== UserRoleEnum.owner)
-    throw new LocaleError('userNotAuthorized');
-
-  next();
-};
-
-auth.admin = async (req: Request, _: Response, next: NextFunction) => {
-  await authenticateUser(req);
-
-  if (req.user.role === UserRoleEnum.manager)
-    throw new LocaleError('userNotAuthorized');
-
-  next();
-};

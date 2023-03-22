@@ -5,7 +5,7 @@ import ICollaboratorRepository from '@modules/collaborator/repositories/ICollabo
 import Collaborator from '@modules/collaborator/infra/typeorm/entities/Collaborator';
 
 @injectable()
-export default class AuthenticateUserService {
+export default class AuthenticateCollaboratorService {
   constructor(
     @inject('CollaboratorRepository')
     private collaboratorRepository: ICollaboratorRepository,
