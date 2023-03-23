@@ -29,6 +29,10 @@ export default class OrderRepository implements IOrderRepository {
       'sector_relations.sector',
       'collaborator_relations',
       'collaborator_relations.collaborator',
+      'comments',
+      'comments.collaborator',
+      'comments.user',
+      'customer',
     ];
     const response = await this.ormRepository.findAndCount(paging);
 
@@ -48,6 +52,7 @@ export default class OrderRepository implements IOrderRepository {
             'comments',
             'comments.collaborator',
             'comments.user',
+            'customer',
           ],
     });
   }

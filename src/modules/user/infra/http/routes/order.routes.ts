@@ -15,8 +15,8 @@ orderRouter.post(
   auth,
   celebrate({
     [Segments.BODY]: {
-      sectors: Joi.array().items(joiOrderSectorSchema.required()).required(),
-      collaborator_ids: Joi.array().items(Joi.string().uuid()).default([]),
+      sectors: Joi.array().items(joiOrderSectorSchema).required(),
+      collaborator_ids: Joi.array().items(Joi.string()).default([]),
       customer_id: Joi.string().uuid().allow(null).default(null),
       display_name: Joi.string().required(),
       description: Joi.string().allow(null).default(null),

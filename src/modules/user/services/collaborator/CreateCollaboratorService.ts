@@ -9,6 +9,7 @@ import IHashProvider from '@shared/container/providers/HashProvider/models/IHash
 import { LocaleError } from '@shared/errors/LocaleError';
 import ISectorRepository from '@modules/sector/repositories/ISectorRepository';
 import ICollaboratorSectorRelationRepository from '@modules/collaborator/repositories/ICollaboratorSectorRelationRepository';
+import populateConfig from '@config/populate';
 
 interface IRequest extends Omit<ICreateCollaboratorDTO, 'created_by'> {
   user: User;
@@ -57,6 +58,7 @@ export default class CreateCollaboratorService {
 
     const collaborator = await this.collaboratorRepository.create({
       ...data,
+      recent_flags: populateConfig.defaultFlags,
       created_by: user.id,
       password: hashedPassword,
     });

@@ -1,3 +1,7 @@
+import {
+  formatCollaboratorEntity,
+  IFormattedCollaborator,
+} from '@modules/collaborator/utils';
 import Sector from '../infra/typeorm/entities/Sector';
 
 export interface IFormattedSector {
@@ -6,12 +10,20 @@ export interface IFormattedSector {
   display_name: string;
   description: string | null;
   color: string | null;
+  collaborators: IFormattedCollaborator[];
 }
 
-export const formatSectorEntity = (sector: Sector) => ({
+type FuncType = (sector: Sector) => IFormattedSector;
+
+export const formatSectorEntity: FuncType = sector => ({
   id: sector.id,
   created_by: sector.created_by,
   display_name: sector.display_name,
   description: sector.description,
   color: sector.color,
+  collaborators: sector.collaborator_relations?.map(
+    r =>
+      formatCollaboratorEntity({ ...r.collaborator, sector_relations: [] }) ||
+      [],
+  ),
 });

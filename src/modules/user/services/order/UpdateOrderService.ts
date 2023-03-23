@@ -19,11 +19,7 @@ import {
   logger,
   updateEntity,
 } from '@shared/utils';
-import {
-  formatOrderEntity,
-  getOrderFilesDiff,
-  IFormattedOrder,
-} from '@modules/order/utils';
+import { getOrderFilesDiff } from '@modules/order/utils';
 
 type Sectors = Array<Omit<ICreateOrderSectorRelationDTO, 'order_id'>>;
 interface IRequest {
@@ -71,7 +67,7 @@ export default class UpdateOrderService {
     collaborator_ids,
     sectors,
     ...data
-  }: IRequest): Promise<IFormattedOrder> {
+  }: IRequest): Promise<void> {
     const order = await this.orderRepository.findById(id);
     if (!order) throw new LocaleError('orderNotFound');
 
@@ -79,7 +75,6 @@ export default class UpdateOrderService {
       const customer = await this.customerRepository.findById(data.customer_id);
       if (!customer) throw new LocaleError('customerNotFound');
     }
-
     await Promise.all([
       this.updateFiles(order, files),
       this.updateSectorRelations(order, sectors),
@@ -93,8 +88,6 @@ export default class UpdateOrderService {
     logger.info(
       `ORDER UPDATED BY - ${user.email} : ${JSON.stringify(order, null, 4)}`,
     );
-
-    return formatOrderEntity(order);
   }
 
   private async updateFiles(order: Order, files?: File[]): Promise<void> {
@@ -132,14 +125,9 @@ export default class UpdateOrderService {
   }
 
   private async updateSectorRelations(order: Order, sectorsData?: Sectors) {
-    if (!sectorsData?.length) return;
+    if (!sectorsData) return;
 
     const sectorIds = sectorsData.map(e => e.sector_id);
-
-    const relations = order.sector_relations.filter(r =>
-      sectorIds.includes(r.sector_id),
-    );
-    if (sectorIds.length === relations.length) return;
 
     const sectors = await this.sectorRepository.findByIds(sectorIds);
     if (sectors.length !== sectorIds.length)
@@ -165,12 +153,7 @@ export default class UpdateOrderService {
     order: Order,
     collaboratorIds?: string[],
   ) {
-    if (!collaboratorIds?.length) return;
-
-    const relations = order.collaborator_relations.filter(r =>
-      collaboratorIds.includes(r.collaborator_id),
-    );
-    if (collaboratorIds.length === relations.length) return;
+    if (!collaboratorIds) return;
 
     const collaborators = await this.collaboratorRepository.findByIds(
       collaboratorIds,

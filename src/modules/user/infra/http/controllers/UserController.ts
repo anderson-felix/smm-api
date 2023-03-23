@@ -14,7 +14,7 @@ export default class UserController {
 
     const response = await authenticateAdmin.execute(req.body);
 
-    return res.json(response);
+    return res.setHeader('Access-Control-Allow-Origin', '*').json(response);
   }
 
   public static async create(req: Request, res: Response): Promise<Response> {

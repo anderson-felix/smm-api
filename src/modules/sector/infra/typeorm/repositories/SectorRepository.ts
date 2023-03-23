@@ -24,6 +24,10 @@ export default class SectorRepository implements ISectorRepository {
   }
 
   public async find(paging: IPagingTypeORM) {
+    paging.relations = [
+      'collaborator_relations',
+      'collaborator_relations.collaborator',
+    ];
     const response = await this.ormRepository.findAndCount(paging);
 
     return formatPagingResponse(paging, response);
@@ -31,6 +35,10 @@ export default class SectorRepository implements ISectorRepository {
 
   public async findById(id: string) {
     return await this.ormRepository.findOne({ where: { id } });
+  }
+
+  public async findByName(display_name: string) {
+    return await this.ormRepository.findOne({ where: { display_name } });
   }
 
   public async findByIds(ids: string[]) {

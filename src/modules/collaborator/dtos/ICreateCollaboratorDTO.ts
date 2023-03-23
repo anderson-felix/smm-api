@@ -1,4 +1,4 @@
-import { Address } from '@shared/interfaces';
+import { Address, Flag } from '@shared/interfaces';
 
 export default interface ICreateCollaboratorDTO {
   created_by: string;
@@ -10,4 +10,5 @@ export default interface ICreateCollaboratorDTO {
   phone: string;
   hourly_price: string | null;
   address: Address | null;
+  recent_flags: Flag[];
 }

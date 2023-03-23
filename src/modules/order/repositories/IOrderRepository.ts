@@ -5,8 +5,8 @@ import { IPagingTypeORM } from '@shared/infra/http/middlewares/getPagingHandler'
 
 export default interface IOrderRepository {
   create(data: ICreateOrderDTO): Promise<Order>;
-  save(movie: Order): Promise<Order>;
+  save(order: Order): Promise<Order>;
   find(paging: IPagingTypeORM): Promise<IPagingResponse<Order>>;
   findById(id: string, relationless?: boolean): Promise<Order | undefined>;
-  remove(movie: Order): Promise<void>;
+  remove(order: Order): Promise<void>;
 }

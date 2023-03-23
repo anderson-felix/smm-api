@@ -17,7 +17,7 @@ collaboratorRouter.post(
   auth.admin,
   celebrate({
     [Segments.BODY]: {
-      sector_ids: Joi.array().items(Joi.string().uuid().required()).required(),
+      sector_ids: Joi.array().items(Joi.string().uuid()).required(),
       name: joiNameValidator.required(),
       email: Joi.string().email().required(),
       password: joiPasswordValidator.required(),
@@ -59,15 +59,15 @@ collaboratorRouter.patch(
   }),
   celebrate({
     [Segments.BODY]: {
-      sector_ids: Joi.array().items(Joi.string().uuid().required()),
+      sector_ids: Joi.array().items(Joi.string().uuid()),
       name: joiNameValidator,
       email: Joi.string().email(),
       password: joiPasswordValidator,
       old_password: Joi.string(),
-      description: Joi.string(),
+      description: Joi.string().allow(null),
       phone: Joi.string(),
       address: addressJoiSchema.allow(null),
-      hourly_price: Joi.string(),
+      hourly_price: Joi.string().allow(null),
     },
   }),
   CollaboratorController.update,

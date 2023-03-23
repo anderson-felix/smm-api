@@ -5,6 +5,7 @@ import User from '@modules/user/infra/typeorm/entities/User';
 import ISectorRepository from '@modules/sector/repositories/ISectorRepository';
 import ICreateSectorDTO from '@modules/sector/dtos/ICreateSectorDTO';
 import Sector from '@modules/sector/infra/typeorm/entities/Sector';
+import { LocaleError } from '@shared/errors/LocaleError';
 
 interface IRequest extends Omit<ICreateSectorDTO, 'created_by'> {
   user: User;
@@ -18,6 +19,11 @@ export default class CreateSectorService {
   ) {}
 
   public async execute({ user, ...data }: IRequest): Promise<Sector> {
+    const sectorAlreadyExists = await this.sectorRepository.findByName(
+      data.display_name,
+    );
+    if (sectorAlreadyExists) throw new LocaleError('sectorAlreadyExists');
+
     const sector = await this.sectorRepository.create({
       ...data,
       created_by: user.id,

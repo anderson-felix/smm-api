@@ -6,6 +6,7 @@ import { LocaleError } from '@shared/errors/LocaleError';
 import ICreateUserDTO from '@modules/user/dtos/ICreateUserDTO';
 import { formatUserEntity, IFormattedUser } from '@modules/user/utils';
 import { logger } from '@shared/utils';
+import populateConfig from '@config/populate';
 
 @injectable()
 export default class CreateUserService {
@@ -31,6 +32,7 @@ export default class CreateUserService {
 
     const user = await this.userRepository.create({
       ...params,
+      recent_flags: populateConfig.defaultFlags,
       password: hashedPassword,
     });
 

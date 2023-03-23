@@ -10,7 +10,6 @@ import UpdateOrderService from '@modules/user/services/order/UpdateOrderService'
 export default class OrderController {
   public static async create(req: Request, res: Response): Promise<Response> {
     const createOrder = container.resolve(CreateOrderService);
-
     const order = await createOrder.execute({ user: req.user, ...req.body });
 
     return res.json(order);

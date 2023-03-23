@@ -8,6 +8,7 @@ export default interface ISectorRepository {
   save(entity: Sector): Promise<Sector>;
   find(paging: IPagingTypeORM): Promise<IPagingResponse<Sector>>;
   findById(id: string): Promise<Sector | undefined>;
+  findByName(display_name: string): Promise<Sector | undefined>;
   findByIds(ids: string[]): Promise<Sector[]>;
   remove(entity: Sector): Promise<void>;
 }

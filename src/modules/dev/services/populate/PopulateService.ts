@@ -23,6 +23,9 @@ export default class PopulateService {
       user_dto.password,
     );
 
-    await this.userRepository.create({ ...user_dto, password: hashedPassword });
+    await this.userRepository.create({
+      ...user_dto,
+      password: hashedPassword,
+    });
   }
 }

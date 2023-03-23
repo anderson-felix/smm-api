@@ -17,7 +17,8 @@ export type LocaleErrorType =
   | 'customerNotFound'
   | 'collaboratorNotFound'
   | 'sectorNotFound'
-  | 'commentNotFound';
+  | 'commentNotFound'
+  | 'sectorAlreadyExists';
 
 export const localeErrorLanguage = <const>['pt', 'en'];
 
@@ -164,6 +165,13 @@ export const localeErrors: Record<LocaleErrorType, LocaleErrorObject> = {
     message: {
       pt: 'Comentário não encontrado',
       en: 'comment not found',
+    },
+  },
+  sectorAlreadyExists: {
+    status: 403,
+    message: {
+      pt: 'Este setor já está registrado',
+      en: 'This sector already register',
     },
   },
 };

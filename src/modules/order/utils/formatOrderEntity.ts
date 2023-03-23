@@ -11,15 +11,16 @@ import { formatOrderCommentEntity, IFormattedOrderComment } from '.';
 export interface IFormattedOrder {
   id: string;
   created_by: string;
-  customer_id: string | null;
   display_name: string;
+  customer_id: string | null;
   description: string | null;
   status: OrderStatusEnum;
   files: File[];
   flags: Flag[];
   collaborators: IFormattedCollaborator[];
-  sectors: IFormattedSector[];
+  sectors: (IFormattedSector & { estimated_hours: string | null })[];
   comments: IFormattedOrderComment[];
+  customer: { name: string; id: string } | null;
 }
 
 type FuncType = (order: Order) => IFormattedOrder;
@@ -36,6 +37,16 @@ export const formatOrderEntity: FuncType = order => ({
   collaborators: order.collaborator_relations.map(r =>
     formatCollaboratorEntity({ ...r.collaborator, sector_relations: [] }),
   ),
-  sectors: order.sector_relations.map(r => formatSectorEntity(r.sector)),
-  comments: order.comments?.map(formatOrderCommentEntity) || [],
+  sectors: order.sector_relations.map(r => ({
+    ...formatSectorEntity(r.sector),
+    estimated_hours: r.estimated_hours,
+  })),
+  comments:
+    order.comments
+      ?.map(formatOrderCommentEntity)
+      .sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      ) || [],
+  customer: order.customer,
 });

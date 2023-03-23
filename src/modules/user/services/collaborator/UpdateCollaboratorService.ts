@@ -99,11 +99,6 @@ export default class UpdateCollaboratorService {
   ) {
     if (!sector_ids?.length) return;
 
-    const relations = collaborator.sector_relations.filter(r =>
-      sector_ids.includes(r.sector_id),
-    );
-    if (sector_ids.length === relations.length) return;
-
     const sectors = await this.sectorRepository.findByIds(sector_ids);
     if (sectors.length !== sector_ids.length)
       throw new LocaleError('sectorNotFound');

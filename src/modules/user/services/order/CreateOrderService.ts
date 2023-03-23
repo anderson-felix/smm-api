@@ -2,7 +2,6 @@ import { injectable, inject } from 'tsyringe';
 
 import { logger } from '@shared/utils';
 import { LocaleError } from '@shared/errors/LocaleError';
-import { formatOrderEntity, IFormattedOrder } from '@modules/order/utils';
 import IOrderRepository from '@modules/order/repositories/IOrderRepository';
 import ICreateOrderDTO from '@modules/order/dtos/ICreateOrderDTO';
 import User from '@modules/user/infra/typeorm/entities/User';
@@ -46,12 +45,16 @@ export default class CreateOrderService {
     collaborator_ids,
     sectors: sectorsData,
     ...data
-  }: IRequest): Promise<IFormattedOrder> {
-    const [sectors, collaborators, customer] = await Promise.all([
-      this.sectorRepository.findByIds(sectorsData.map(e => e.sector_id)),
-      this.collaboratorRepository.findByIds(collaborator_ids),
-      this.customerRepository.findById(data.customer_id || ''),
-    ]);
+  }: IRequest): Promise<void> {
+    const sectors = await this.sectorRepository.findByIds(
+      sectorsData.map(e => e.sector_id),
+    );
+    const collaborators = await this.collaboratorRepository.findByIds(
+      collaborator_ids,
+    );
+    const customer = data.customer_id
+      ? await this.customerRepository.findById(data.customer_id)
+      : null;
 
     if (data.customer_id && !customer)
       throw new LocaleError('customerNotFound');
@@ -86,7 +89,5 @@ export default class CreateOrderService {
     logger.info(
       `ORDER CREATED BY - ${user.email} : ${JSON.stringify(order, null, 4)}`,
     );
-
-    return formatOrderEntity(order);
   }
 }
